@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Task Manager</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Task Manager</title>
+
+    <!-- IMPORTANT for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 <div class="container">
-<h2>Your Tasks</h2>
 
-<form action="/add" method="POST">
-<input name="task" placeholder="New task" required>
-<button>Add</button>
-</form>
+    <h2>Your Tasks</h2>
 
-<ul>
-{% for task in tasks %}
-<li class="{{ 'done' if task['status'] else '' }}">
-{{ task['content'] }}
+    <!-- Add Task Form -->
+    <form action="/add" method="POST">
+        <input type="text" name="task" placeholder="New task" required>
+        <button type="submit">Add</button>
+    </form>
 
-<a href="/complete/{{task['id']}}">✔</a>
-<a href="/delete/{{task['id']}}">❌</a>
-</li>
-{% endfor %}
-</ul>
+    <!-- Task List -->
+    <ul>
+        {% for task in tasks %}
+        <li class="{{ 'done' if task['status'] else '' }}">
+            
+            <span>{{ task['content'] }}</span>
 
-<a href="/logout">Logout</a>
+            <div>
+                {% if task['status'] == 0 %}
+                <a href="/complete/{{task['id']}}">✔</a>
+                {% endif %}
+                <a href="/delete/{{task['id']}}">❌</a>
+            </div>
+
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Logout -->
+    <a href="/logout">Logout</a>
+
 </div>
 
 </body>
