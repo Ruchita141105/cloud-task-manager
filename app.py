@@ -4,15 +4,15 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "secret123"
 
+# ---------------- DB ----------------
 def get_db():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-# -------------------- INIT DB --------------------
-@app.before_first_request
 def init_db():
     db = get_db()
+
     db.execute('''CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE,
@@ -25,9 +25,13 @@ def init_db():
         content TEXT,
         status INTEGER
     )''')
+
     db.commit()
 
-# -------------------- AUTH --------------------
+# Initialize DB when app starts (IMPORTANT for Render)
+init_db()
+
+# ---------------- AUTH ----------------
 @app.route('/register', methods=['GET','POST'])
 def register():
     if request.method == 'POST':
@@ -42,6 +46,7 @@ def register():
             return redirect('/login')
         except:
             return "User already exists"
+
     return render_template('register.html')
 
 
@@ -70,7 +75,7 @@ def logout():
     return redirect('/login')
 
 
-# -------------------- TASKS --------------------
+# ---------------- TASKS ----------------
 @app.route('/')
 def index():
     if 'user_id' not in session:
@@ -86,8 +91,8 @@ def index():
 @app.route('/add', methods=['POST'])
 def add():
     task = request.form['task']
-    db = get_db()
 
+    db = get_db()
     db.execute("INSERT INTO tasks (user_id, content, status) VALUES (?,?,?)",
                (session['user_id'], task, 0))
     db.commit()
@@ -111,6 +116,6 @@ def delete(id):
     return redirect('/')
 
 
-# -------------------- RUN --------------------
+# ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run()
