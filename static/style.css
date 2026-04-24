@@ -1,18 +1,18 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f1f5f9;
+    background: #e2e8f0;
     display: flex;
     justify-content: center;
-    margin-top: 60px;
+    margin-top: 50px;
 }
 
-/* Main box */
+/* Main container */
 .container {
-    width: 350px;
-    background: white;
+    width: 400px;
+    background: #f8fafc;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
 /* Heading */
@@ -21,17 +21,17 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Form layout */
+/* Form */
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
-/* Input fields */
+/* Input */
 input {
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid #ccc;
 }
 
@@ -41,7 +41,7 @@ button {
     background: #3b82f6;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
@@ -49,15 +49,47 @@ button:hover {
     background: #2563eb;
 }
 
-/* Links */
+/* TASK LIST FIX 🔥 */
+ul {
+    list-style: none;   /* removes bullets */
+    padding: 0;
+    margin-top: 20px;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Completed task */
+.done {
+    text-decoration: line-through;
+    color: gray;
+}
+
+/* Icons */
+li a {
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+/* Logout link */
 a {
     display: block;
     text-align: center;
-    margin-top: 12px;
-    text-decoration: none;
+    margin-top: 15px;
     color: #3b82f6;
 }
 
-a:hover {
-    text-decoration: underline;
+/* 📱 Mobile friendly */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+    }
 }
