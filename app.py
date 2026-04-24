@@ -31,7 +31,7 @@ def init_db():
 # Call DB init at startup (IMPORTANT for Render)
 init_db()
 
-# ---------------- AUTH ----------------
+# ---------------- AUTH -----------------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
