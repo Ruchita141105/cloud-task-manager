@@ -4,7 +4,7 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-# ---------------- DB ----------------
+# ---------------- DATABASE ----------------
 def get_db():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -28,11 +28,11 @@ def init_db():
 
     db.commit()
 
-# Initialize DB when app starts (IMPORTANT for Render)
+# Call DB init at startup (IMPORTANT for Render)
 init_db()
 
 # ---------------- AUTH ----------------
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -40,7 +40,7 @@ def register():
 
         db = get_db()
         try:
-            db.execute("INSERT INTO users (username, password) VALUES (?,?)",
+            db.execute("INSERT INTO users (username, password) VALUES (?, ?)",
                        (username, password))
             db.commit()
             return redirect('/login')
@@ -50,15 +50,17 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
         db = get_db()
-        user = db.execute("SELECT * FROM users WHERE username=? AND password=?",
-                          (username, password)).fetchone()
+        user = db.execute(
+            "SELECT * FROM users WHERE username=? AND password=?",
+            (username, password)
+        ).fetchone()
 
         if user:
             session['user_id'] = user['id']
@@ -82,19 +84,26 @@ def index():
         return redirect('/login')
 
     db = get_db()
-    tasks = db.execute("SELECT * FROM tasks WHERE user_id=?",
-                       (session['user_id'],)).fetchall()
+    tasks = db.execute(
+        "SELECT * FROM tasks WHERE user_id=?",
+        (session['user_id'],)
+    ).fetchall()
 
     return render_template('index.html', tasks=tasks)
 
 
 @app.route('/add', methods=['POST'])
 def add():
+    if 'user_id' not in session:
+        return redirect('/login')
+
     task = request.form['task']
 
     db = get_db()
-    db.execute("INSERT INTO tasks (user_id, content, status) VALUES (?,?,?)",
-               (session['user_id'], task, 0))
+    db.execute(
+        "INSERT INTO tasks (user_id, content, status) VALUES (?, ?, ?)",
+        (session['user_id'], task, 0)
+    )
     db.commit()
 
     return redirect('/')
