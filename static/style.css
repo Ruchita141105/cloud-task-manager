@@ -87,6 +87,12 @@ a {
     color: #3b82f6;
 }
 
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 /* 📱 Mobile friendly */
 @media (max-width: 480px) {
     .container {
