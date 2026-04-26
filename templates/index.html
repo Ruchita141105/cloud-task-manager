@@ -29,7 +29,7 @@
             
             <span>{{ task['content'] }}</span>
 
-            <div>
+            <div class="actions">
                 {% if task['status'] == 0 %}
                 <a href="/complete/{{task['id']}}">✔</a>
                 {% endif %}
